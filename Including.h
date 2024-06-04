@@ -33,7 +33,7 @@ Mat CaptureScreen(const Rect& screenRect) {
     BITMAPINFOHEADER bi;
     bi.biSize = sizeof(BITMAPINFOHEADER);
     bi.biWidth = screenRect.width;
-    bi.biHeight = -screenRect.height;
+    bi.biHeight = -screenRect.height; // Высота изображения отрицательна для правильного направления координат
     bi.biPlanes = 1;
     bi.biBitCount = 32;
     bi.biCompression = BI_RGB;
@@ -49,13 +49,17 @@ Mat CaptureScreen(const Rect& screenRect) {
     DeleteDC(hMemoryDC);
     ReleaseDC(NULL, hScreenDC);
 
-    return screenMat;
+    // Обрезка верхней части изображения на cropTop пикселей
+    Rect croppedRect(0, 110, screenRect.width, screenRect.height - 110);
+    Mat croppedScreenMat = screenMat(croppedRect);
+
+    return croppedScreenMat;
 }
 
 void mouseClick(Rect boundRect)
 {
-    SetCursorPos(boundRect.x, boundRect.y);
-    Sleep(100);
+    SetCursorPos(boundRect.x, boundRect.y + 110);
+    Sleep(100000);
     mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 }
 
@@ -65,16 +69,16 @@ void contoursEnum(Mat screen, vector<vector<Point>> contours)
         // Получение ограничивающего прямоугольника для каждого контура
         Rect boundRect = boundingRect(contours[i]);
 
-        // Отображение прямоугольников на изображении
+        // Show rectangle on the picture
         rectangle(screen, boundRect, Scalar(0, 0, 255), 2);
 
-        // Вывод координат прямоугольников
-        cout << "Object " << i + 1 << ": ";
+        // print coordinats of the rectangles
+        /*cout << "Object " << i + 1 << ": ";
         cout << "Top-left corner: (" << boundRect.x << ", " << boundRect.y << "), ";
         cout << "Width: " << boundRect.width << ", ";
-        cout << "Height: " << boundRect.height << endl;
+        cout << "Height: " << boundRect.height << endl;*/
 
-        mouseClick(boundRect);
+        //mouseClick(boundRect);
     }
 }
 
@@ -86,8 +90,14 @@ void windowsPrepare(HWND hwnd)
     SetForegroundWindow(hwnd);
     SetActiveWindow(hwnd);
 
+    Sleep(2000);
+    namedWindow("Objects Detection", WINDOW_NORMAL);
+    HWND windowOut = FindWindow(NULL, L"Objects Detection");
+    if (windowOut == NULL) 
+        MessageBox(0, L"LOh", L"aha", MB_ICONERROR);
+    else
+        SetWindowPos(windowOut, HWND_TOPMOST, 400, 20, 0, 0, SWP_NOSIZE);
+
     // Wait a bit to ensure the window is fully on top
     Sleep(100);
-
-    namedWindow("Red Object Detection", WINDOW_NORMAL);
 }
