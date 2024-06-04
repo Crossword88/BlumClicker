@@ -3,6 +3,14 @@
 int low_b = 0, low_g = 0, low_r = 0;
 int high_b = 255, high_g = 255, high_r = 255;
 
+bool IsTelegramDesktop(HWND hwnd) {
+    const int bufferSize = 256;
+    wchar_t windowTitle[bufferSize];
+    GetWindowText(hwnd, windowTitle, bufferSize);
+    return wcscmp(windowTitle, L"TelegramDesktop") == 0;
+}
+
+
 // Function to get window coordinates
 bool GetWindowRectangle(HWND hwnd, Rect& rect) {
     RECT winRect;

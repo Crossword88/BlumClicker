@@ -3,11 +3,16 @@
 
 int main(int argc, char** argv) {
     // Find window by name
-    HWND hwnd = FindWindow(NULL, L"TelegramDesktop"); // Replace with the name of your window
-    if (!hwnd) {
-        cerr << "Window not found" << endl;
-        return -1;
+
+    std::cout << "Waiting for TelegramDesktop...\n";
+    HWND hwnd = FindWindow(NULL, L"TelegramDesktop");
+
+    while (!hwnd || !IsTelegramDesktop(hwnd)) {
+        hwnd = FindWindow(NULL, L"TelegramDesktop");
+        Sleep(100); // Adding a small delay to avoid high CPU usage in the loop
     }
+
+    std::cout << "TelegramDesktop FOUND...\n";
 
     int key = 0;
 
@@ -15,11 +20,19 @@ int main(int argc, char** argv) {
     createTaskBars();
 #endif
 
+    bool pause = true;
+
     while (true) { // Press ESC to exit
 
         if (GetAsyncKeyState(VK_ESCAPE)) {
-            cout << "ESC key pressed. Exiting..." << endl;
-            break;
+            pause = !pause;
+            cout << "Pause set to " << pause << endl;
+            // Adding a small delay to debounce the ESC key press
+            Sleep(200);
+        }
+
+        if (pause) {
+            continue;
         }
 
         // Get window coordinates

@@ -11,6 +11,7 @@ const String window_detection_name = "Object Detection";
 extern int low_b, low_g, low_r;
 extern int high_b, high_g, high_r;
 
+bool IsTelegramDesktop(HWND hwnd);
 void createTaskBars();
 void setDebugRange(Mat screen, Mat res);
 bool GetWindowRectangle(HWND hwnd, Rect& rect);
