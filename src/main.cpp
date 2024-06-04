@@ -17,6 +17,11 @@ int main(int argc, char** argv) {
 
     while (true) { // Press ESC to exit
 
+        if (GetAsyncKeyState(VK_ESCAPE)) {
+            cout << "ESC key pressed. Exiting..." << endl;
+            break;
+        }
+
         // Get window coordinates
         Rect windowRect;
         if (!GetWindowRectangle(hwnd, windowRect)) {
