@@ -22,9 +22,13 @@ int main(int argc, char** argv) {
 
     bool pause = true;
 
+#ifdef _DEBUG
+    pause = false;
+#endif
+
     while (true) { // Press ESC to exit
 
-        if (GetAsyncKeyState(VK_ESCAPE)) {
+        if (GetAsyncKeyState(0x50)) {
             pause = !pause;
             cout << "Pause set to " << pause << endl;
             // Adding a small delay to debounce the ESC key press
@@ -54,7 +58,10 @@ int main(int argc, char** argv) {
         cvtColor(screen, bgrScreen, COLOR_RGBA2RGB);
 
 #ifdef _DEBUG
+        imshow("Blum", bgrScreen);
         setDebugRange(bgrScreen, res);
+        imshow("Mask", res);
+        waitKey(30);
         continue;
 #endif
 

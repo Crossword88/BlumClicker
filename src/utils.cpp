@@ -123,6 +123,6 @@ void createTaskBars() {
     createTrackbar("High R", window_detection_name, &high_r, 255, on_high_R_thresh_trackbar);
 }
 
-void setDebugRange(Mat screen, Mat res) {
+void setDebugRange(Mat& screen, Mat& res) {
     inRange(screen, Scalar(low_b, low_g, low_r), Scalar(high_b, high_g, high_r), res);
 }

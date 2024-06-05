@@ -13,7 +13,7 @@ extern int high_b, high_g, high_r;
 
 bool IsTelegramDesktop(HWND hwnd);
 void createTaskBars();
-void setDebugRange(Mat screen, Mat res);
+void setDebugRange(Mat& screen, Mat& res);
 bool GetWindowRectangle(HWND hwnd, Rect& rect);
 std::string type2str(int type);
 Mat CaptureScreen(const Rect& screenRect);
