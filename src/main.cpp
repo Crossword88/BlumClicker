@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
             ClickAt(windowRect.x + pt.x, windowRect.y + pt.y);
         }
         ClickAt(windowRect.x + pt.x, windowRect.y + pt.y);
+	Sleep(60);
     }
 
     return 0;
