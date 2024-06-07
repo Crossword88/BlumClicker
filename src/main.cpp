@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
     // Find window by name
-    std::cout << "Author: @homyaklol in telegram. Feel free to message me.\n";
+    std::cout << "Authors: @homyaklol @Botovod1 in telegram. Feel free to message me.\n";
     std::cout << "Waiting for TelegramDesktop...\n";
     HWND hwnd = FindWindow(NULL, L"TelegramDesktop");
 
