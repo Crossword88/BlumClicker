@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv) {
     // Find window by name
-
+    std::cout << "Author: @homyaklol in telegram. Feel free to message me.\n";
     std::cout << "Waiting for TelegramDesktop...\n";
     HWND hwnd = FindWindow(NULL, L"TelegramDesktop");
 
@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
 #ifdef _DEBUG
     pause = false;
 #endif
+    std::cout << "To start / pause the bot press P\n";
 
     while (true) { // Press ESC to exit
 
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
 
         // Capture the screen area corresponding to the window
         Mat screen = CaptureScreen(windowRect);
+       // Mat screen = imread("C://img.png");
 
         if (screen.empty()) {
             cerr << "Failed to capture screen" << endl;
@@ -75,8 +77,7 @@ int main(int argc, char** argv) {
         if (pt.x != 0 && pt.y != 0) {
             ClickAt(windowRect.x + pt.x, windowRect.y + pt.y);
         }
-        ClickAt(windowRect.x + pt.x, windowRect.y + pt.y);
-	Sleep(60);
+        Sleep(60);
     }
 
     return 0;
