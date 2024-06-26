@@ -1,5 +1,9 @@
 #include "utils.h"
 
+int times = 1;
+int gamePeriod = 800000;
+
+bool pause = false;
 
 bool checkComputerName(std::string originName)
 {
@@ -9,12 +13,24 @@ bool checkComputerName(std::string originName)
     return name == originName? true : false;
 }
 
-void waiting()
+void waiting(int spendTickets, Rect blumRect)
 {
     while (true)
     {
-        Sleep(35000);
-        ClickAt(100, 600);
+        std::cout << times << std::endl;
+        Sleep(gamePeriod);   //waiting for the endgame
+        if (times < spendTickets) //-1 cuz of start
+        {
+            ClickAt(blumRect.x + 100, blumRect.y + 600);
+            times++;
+        }
+        else
+        {
+            std::cout << "\nEND\n";
+            pause = true;
+
+            std::exit(0);
+        }
     }
 }
 
@@ -26,7 +42,7 @@ int main(int argc, char** argv)
     // Find window by name
     ShowWindow(FindWindowA("ConsoleWindowClass", NULL), 1);
     std::cout << "Authors: @homyaklol and @Botovod1 in telegram. Feel free to message us.\n";
-    std::cout << "Waiting for TelegramDesktop...\n";
+    std::cout << "Waiting for Blum window...\n";
     HWND hwnd = FindWindow(NULL, L"TelegramDesktop");
 
     while (!hwnd || !IsTelegramDesktop(hwnd)) {
@@ -36,21 +52,32 @@ int main(int argc, char** argv)
 
     SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
 
-    std::cout << "TelegramDesktop FOUND...\n";
+    std::cout << "Blum window FOUND...\n\n";
 
-    int key = 0;
+    int spendTickets = 0;
+    std::cout << "Enter the number of tickets you wanna spend:\n";
+
+    std::cin >> spendTickets;
+    std::cout << "\nBOT HAS BEEN STARTED:\n";
+    
+    Rect blumRect;
+    
+    // Get window coordinates
+    if (!GetWindowRectangle(hwnd, blumRect)) {
+        cerr << "Failed to get window rect" << endl;
+        return -1;
+    }
+
+    ClickAt(blumRect.x + 300, blumRect.y + 475);
+
 
 #ifdef _DEBUG
     createTaskBars();
 #endif
 
-    bool pause = true;
 
-#ifdef _DEBUG
-    pause = false;
-#endif
 
-    std::thread wait(waiting);
+    std::thread wait(waiting, spendTickets, blumRect);
     wait.detach();
 
     
@@ -68,15 +95,8 @@ int main(int argc, char** argv)
             continue;
         }
 
-        // Get window coordinates
-        Rect windowRect;
-        if (!GetWindowRectangle(hwnd, windowRect)) {
-            cerr << "Failed to get window rect" << endl;
-            return -1;
-        }
-
         // Capture the screen area corresponding to the window
-        Mat screen = CaptureScreen(windowRect);
+        Mat screen = CaptureScreen(blumRect);
 
         if (screen.empty()) {
             cerr << "Failed to capture screen" << endl;
